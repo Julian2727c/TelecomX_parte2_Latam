@@ -1,5 +1,3 @@
-Este es un diseño de `README.md` profesional, estructurado y visualmente atractivo para tu proyecto de **Telecom X**. Está diseñado para resaltar tus habilidades técnicas y la capacidad de convertir datos en decisiones de negocio.
-
 ---
 
 # 📡 Telecom X - Análisis de Churn (Parte 2)
