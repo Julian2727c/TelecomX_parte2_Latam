@@ -1,79 +1,145 @@
+# 📊 Telecom X - Predicción de Cancelación de Clientes (Churn)
+
+## 📌 Descripción del Proyecto
+
+Este proyecto tiene como objetivo **predecir la cancelación de clientes (churn)** en la empresa Telecom X utilizando técnicas de **análisis de datos y machine learning**.
+
+A partir de información sobre los servicios contratados, características del cliente y hábitos de pago, se analizan patrones que permitan identificar **clientes con mayor probabilidad de cancelar el servicio**.
+
+Este tipo de análisis permite a las empresas **anticipar la pérdida de clientes y aplicar estrategias de retención**.
+
 ---
 
-# 📡 Telecom X - Análisis de Churn (Parte 2)
+## 🎯 Objetivos del Análisis
 
-## 🎯 Propósito del Proyecto
-
-El objetivo principal de este análisis es **predecir la tasa de cancelación (Churn)** de los clientes de Telecom X. Mediante el uso de modelos de aprendizaje automático, buscamos identificar proactivamente a los usuarios con mayor riesgo de abandonar el servicio, permitiendo al equipo de marketing ejecutar estrategias de retención personalizadas.
+* Analizar las variables que influyen en la cancelación de clientes.
+* Preparar los datos para modelos de machine learning.
+* Construir modelos predictivos para identificar clientes con riesgo de churn.
+* Evaluar el desempeño de diferentes algoritmos de clasificación.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
-```text
+```
+TelecomX-Churn/
+│
 ├── data/
-│   ├── raw_telecom_data.csv       # Datos originales
-│   └── processed_telecom.csv     # Datos limpios y normalizados
+│   └── telecomx_datos_tratados.csv
+│
 ├── notebooks/
-│   └── telecom_x_part2.ipynb     # Cuaderno principal con el análisis
-├── visuals/
-│   └── plots/                     # Gráficos generados (EDA y Matrices)
-└── README.md                      # Documentación del proyecto
-
+│   └── TelecomX_Churn_Analisis.ipynb
+│
+├── images/
+│   └── visualizaciones_generadas.png
+│
+└── README.md
 ```
 
----
+**Descripción de carpetas:**
 
-## ⚙️ Preparación de los Datos
-
-El éxito del modelo reside en el tratamiento riguroso de la información:
-
-1. **Clasificación de Variables:**
-* **Categóricas:** Género, tipo de contrato, método de pago (transformadas mediante *One-Hot Encoding*).
-* **Numéricas:** Tenencia (meses), cargos mensuales, cargos totales (escaladas para uniformidad).
-
-
-2. **Normalización:** Aplicamos `StandardScaler` a las variables numéricas para evitar que escalas mayores (como cargos totales) dominen injustamente el aprendizaje del modelo.
-3. **División de Datos:** Se utilizó un split de **80% entrenamiento / 20% prueba** para asegurar una validación robusta y evitar el sobreajuste (*overfitting*).
-
-> **Justificación:** Se optó por un modelo de Bosques Aleatorios (Random Forest) debido a su excelente manejo de variables categóricas y su capacidad para capturar relaciones no lineales en el comportamiento del cliente.
+* **data/** → contiene el dataset procesado.
+* **notebooks/** → cuaderno principal con el análisis y modelado.
+* **images/** → gráficos generados durante el análisis exploratorio.
+* **README.md** → documentación del proyecto.
 
 ---
 
-## 📊 Insights del EDA (Análisis Exploratorio)
+## 🧹 Preparación de los Datos
 
-Durante el análisis, descubrimos patrones críticos que afectan la retención:
+El preprocesamiento incluyó las siguientes etapas:
 
-* **Contratos mes a mes:** Representan el mayor foco de fuga de clientes.
-* **Cargos Totales:** Los clientes que cancelan suelen tener una tenencia menor a 6 meses pero con cargos mensuales superiores al promedio.
-* **Soporte Técnico:** La falta de servicios de valor agregado (como soporte técnico o seguridad online) correlaciona directamente con un mayor Churn.
+### 1️⃣ Clasificación de variables
+
+Las variables se dividieron en:
+
+**Variables categóricas**
+
+* Género
+* Tiene_Pareja
+* Personas_a_Cargo
+* Servicio_Internet
+* Tipo_Contrato
+* Metodo_Pago
+* Streaming_TV
+* Streaming_Peliculas
+* Soporte_Tecnico
+
+**Variables numéricas**
+
+* Meses_Permanencia
+* Charges.Monthly
+* Charges.Total
+* Cuentas_Diarias
+* Adulto_Mayor
+
+**Variable objetivo**
+
+* `Fuga_Cliente`
+
+  * 0 → Cliente permanece
+  * 1 → Cliente cancela
 
 ---
 
-## 🚀 Instrucciones de Ejecución
+### 2️⃣ Codificación de variables categóricas
 
-### 1. Requisitos Previos
-
-Asegúrate de tener instaladas las siguientes librerías:
-
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn
-
-```
-
-### 2. Carga de Datos
-
-El cuaderno está configurado para leer automáticamente el archivo procesado en la carpeta `/data`. Si deseas replicar el proceso desde cero:
-
-1. Abre `telecom_x_part2.ipynb`.
-2. Ejecuta las celdas de la sección **"Data Cleaning"**.
-3. Los resultados se exportarán automáticamente a un nuevo CSV.
+Se aplicó **One-Hot Encoding** utilizando `pandas.get_dummies()` para convertir las variables categóricas en variables numéricas compatibles con los modelos de machine learning.
 
 ---
 
-### 🤝 Próximos Pasos
+### 3️⃣ Normalización de datos
 
-* [ ] Implementar técnicas de balanceo de clases (SMOTE) para mejorar el Recall del Churn.
-* [ ] Probar modelos de Boosting (XGBoost o LightGBM).
+Se aplicó **StandardScaler** a las variables numéricas para modelos sensibles a la escala de los datos.
 
-**¿Te gustaría que añadamos una tabla comparativa de las métricas finales (Accuracy, Precision, Recall) para que el README sea aún más impactante?**
+Esto asegura que las variables tengan **media 0 y desviación estándar 1**, evitando que variables con mayor magnitud dominen el entrenamiento del modelo.
+
+---
+
+### 4️⃣ División del dataset
+
+El conjunto de datos se dividió en:
+
+* **80% entrenamiento**
+* **20% prueba**
+
+Utilizando `train_test_split` de **Scikit-learn**.
+
+---
+
+## 🤖 Modelos Utilizados
+
+Se implementaron dos modelos de clasificación:
+
+### Regresión Logística
+
+Modelo lineal utilizado para clasificación binaria.
+Requiere normalización debido a su sensibilidad a la escala de las variables.
+
+### Random Forest
+
+Modelo basado en árboles de decisión que combina múltiples árboles para mejorar la precisión y reducir el overfitting.
+Este modelo **no requiere normalización**.
+
+---
+
+## 📊 Tecnologías Utilizadas
+
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Seaborn
+* Scikit-learn
+* Jupyter Notebook
+
+---
+
+## 📈 Conclusión
+
+El análisis permitió identificar variables relevantes asociadas con la cancelación de clientes y construir modelos predictivos capaces de estimar el riesgo de churn.
+
+Este tipo de modelos puede ayudar a las empresas a **tomar decisiones estratégicas orientadas a la retención de clientes**.
+
+
+
